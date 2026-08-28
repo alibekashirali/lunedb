@@ -1,0 +1,78 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build ${{ matrix.label }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            label: macOS (Apple Silicon)
+            args: --target aarch64-apple-darwin
+            rust-targets: aarch64-apple-darwin
+          - os: macos-latest
+            label: macOS (Intel)
+            args: --target x86_64-apple-darwin
+            rust-targets: x86_64-apple-darwin
+          - os: ubuntu-22.04
+            label: Linux
+            args: ""
+            rust-targets: ""
+          - os: windows-latest
+            label: Windows
+            args: ""
+            rust-targets: ""
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Linux build dependencies
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libappindicator3-dev \
+            librsvg2-dev \
+            libssl-dev \
+            patchelf
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust-targets }}
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+          key: ${{ matrix.label }}
+
+      - run: npm ci
+
+      # Binaries are unsigned: macOS users need "Open Anyway" in System Settings
+      # and Windows shows a SmartScreen warning. Signing needs paid certificates.
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: LuneDB ${{ github.ref_name }}
+          releaseBody: |
+            See CHANGELOG or the commit log for what changed.
+
+            The downloads below are **not code-signed**. On macOS, right-click the
+            app and choose Open, or allow it in System Settings → Privacy & Security.
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.args }}

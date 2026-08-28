@@ -1,0 +1,38 @@
+[package]
+name = "lunedb"
+version = "0.1.0"
+edition = "2021"
+description = "Local-first database client and knowledge base. PostgreSQL, offline wiki, local AI."
+authors = ["LuneDB Contributors"]
+license = "MIT"
+repository = "https://github.com/alibekashirali/lunedb"
+homepage = "https://github.com/alibekashirali/lunedb"
+publish = false
+
+[lib]
+name = "lunedb_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-sql = { version = "2", features = ["sqlite"] }
+sqlx = { version = "0.8", features = ["runtime-tokio-rustls", "postgres", "chrono", "uuid", "json", "rust_decimal"] }
+rust_decimal = "1"
+chrono = "0.4"
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"
+reqwest = { version = "0.12", features = ["json", "stream"] }
+futures-util = "0.3"
+keyring = "3"
+ssh2 = { version = "0.9", features = ["vendored-openssl"] }
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true

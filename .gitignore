@@ -39,3 +39,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# rust / tauri
+src-tauri/target/
+src-tauri/gen/
+
+# local sqlite database (wiki + app state)
+lunedb.db
+lunedb.db-shm
+lunedb.db-wal
+
+# editors / os
+.idea/
+.vscode/

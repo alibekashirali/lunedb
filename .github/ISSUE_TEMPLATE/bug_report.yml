@@ -1,0 +1,65 @@
+name: Bug report
+description: Something in LuneDB does not work as expected
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not report security problems here — see [SECURITY.md](https://github.com/alibekashirali/lunedb/blob/main/SECURITY.md).
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what you got instead.
+      placeholder: |
+        1. Opened the connection dialog
+        2. Enabled the SSH tunnel and pressed Test
+        3. …
+    validations:
+      required: true
+
+  - type: textarea
+    id: error
+    attributes:
+      label: Error message
+      description: The exact text LuneDB showed, if any.
+      render: text
+
+  - type: input
+    id: version
+    attributes:
+      label: LuneDB version
+      placeholder: "0.1.0, or the commit you built from"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS
+        - Windows
+        - Linux
+    validations:
+      required: true
+
+  - type: input
+    id: postgres
+    attributes:
+      label: PostgreSQL version
+      description: Only if the problem involves a database connection.
+      placeholder: "16.2"
+
+  - type: checkboxes
+    id: area
+    attributes:
+      label: Where does it happen
+      options:
+        - label: Connecting to a database
+        - label: SSH tunnel
+        - label: SQL editor or results grid
+        - label: Schema tree / ER diagram
+        - label: Wiki or AI features
+        - label: Somewhere else
