@@ -28,7 +28,6 @@ serde_json = "1"
 anyhow = "1"
 reqwest = { version = "0.12", features = ["json", "stream"] }
 futures-util = "0.3"
-keyring = "3"
 ssh2 = { version = "0.9", features = ["vendored-openssl"] }
 
 [profile.release]
@@ -36,3 +35,15 @@ codegen-units = 1
 lto = true
 opt-level = "s"
 strip = true
+
+# keyring 3 has no default features: without an explicit platform backend it
+# silently falls back to an in-memory mock store, so nothing would ever reach
+# the real OS keychain.
+[target.'cfg(target_os = "macos")'.dependencies]
+keyring = { version = "3", features = ["apple-native"] }
+
+[target.'cfg(target_os = "windows")'.dependencies]
+keyring = { version = "3", features = ["windows-native"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+keyring = { version = "3", features = ["sync-secret-service", "crypto-rust"] }
