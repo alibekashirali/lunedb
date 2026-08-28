@@ -10,6 +10,7 @@ answer questions about your schema.
 Everything runs on your machine. There is no LuneDB account, no cloud sync, and
 no telemetry.
 
+[![Download](https://img.shields.io/github/v/release/alibekashirali/lunedb?label=download&color=brightgreen)](https://github.com/alibekashirali/lunedb/releases/latest)
 [![CI](https://github.com/alibekashirali/lunedb/actions/workflows/ci.yml/badge.svg)](https://github.com/alibekashirali/lunedb/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
@@ -67,10 +68,22 @@ More detail, including the known limitations, is in [SECURITY.md](SECURITY.md).
 
 ## Install
 
-Prebuilt installers for macOS, Windows and Linux are attached to each
-[release](https://github.com/alibekashirali/lunedb/releases). They are **not
-code-signed**, so macOS asks you to confirm the first launch in
-System Settings → Privacy & Security, and Windows shows a SmartScreen warning.
+<!-- The direct link below points at a specific file and has to be updated on
+     every release. The "all releases" link never goes stale. -->
+
+**[Download for macOS (Apple Silicon)](https://github.com/alibekashirali/lunedb/releases/download/v0.1.0/LuneDB_0.1.0_aarch64.dmg)** — 8.6 MB, macOS 11 or newer
+
+Other platforms and older versions are on the
+[releases page](https://github.com/alibekashirali/lunedb/releases). Intel Macs,
+Windows and Linux are not built yet — build from source for now.
+
+The builds are **not code-signed**. On macOS the app is blocked after download
+and may be reported as *"damaged"* — it is not, that is what Gatekeeper says
+about unsigned apps. Drag it to Applications and clear the quarantine flag once:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/LuneDB.app
+```
 
 To build it yourself instead, read on.
 
